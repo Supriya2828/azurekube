@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: supriyaazurekube 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: supriyaazurekube
+  template:
+    metadata:
+      labels:
+        app: supriyaazurekube 
+    spec:
+      containers:
+        - name: supriyaazurekube 
+          image: myappsupriyaregistry.azurecr.io/supriyaazurekube
+          ports:
+          - containerPort: 8080
