@@ -1,6 +1,5 @@
 # Deploy to Azure Kubernetes Service
 # Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
 - main
@@ -31,6 +30,7 @@ stages:
   - job: Build
     displayName: Build
     pool:
+      name: 'Azure Pipelines'
       vmImage: $(vmImageName)
     steps:
     - task: Docker@2
@@ -55,6 +55,7 @@ stages:
     condition: and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/')))
     displayName: Deploy
     pool:
+      name: 'Azure Pipelines'
       vmImage: $(vmImageName)
     environment: 'Supriya2828azurekube.default'
     strategy:
@@ -84,6 +85,7 @@ stages:
     displayName: Deploy Pull request
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/pull/'))
     pool:
+      name: 'Azure Pipelines'
       vmImage: $(vmImageName)
 
     environment: 'Supriya2828azurekube.$(k8sNamespaceForPR)'
@@ -131,7 +133,6 @@ stages:
               arguments: svc
               outputFormat: jsonpath='http://{.items[0].status.loadBalancer.ingress[0].ip}:{.items[0].spec.ports[0].port}'
 
-          # Getting the IP of the deployed service and writing it to a variable for posing comment
           - script: |
               url="$(get.KubectlOutput)"
               message="Your review app has been deployed"
